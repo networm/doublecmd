@@ -345,7 +345,7 @@ end;"/>
         <PackageName Value="Image32"/>
       </Item13>
     </RequiredPackages>
-    <Units Count="301">
+    <Units Count="302">
       <Unit0>
         <Filename Value="doublecmd.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -2183,6 +2183,11 @@ end;"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uGoogleFileSource"/>
       </Unit300>
+      <Unit301>
+        <Filename Value="ufileviewtablist.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uFileViewTabList"/>
+      </Unit301>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -56,6 +56,8 @@ type
     cbTabsCloseDuplicateWhenClosing: TCheckBox;
   private
     FPageControl: TPageControl; // For checking Tabs capabilities
+    procedure cmbTabsPositionChange(Sender: TObject);
+    procedure UpdateTabsPositionDependents;
   protected
     procedure Init; override;
     procedure Load; override;
@@ -79,6 +81,22 @@ begin
   ParseLineToList(rsOptTabsPosition, cmbTabsPosition.Items);
   ParseLineToList(rsTabsActionOnDoubleClickChoices, cbTabsActionOnDoubleClick.Items);
   FPageControl := TPageControl.Create(Self);
+  cmbTabsPosition.OnChange := @cmbTabsPositionChange;
+end;
+
+procedure TfrmOptionsTabs.cmbTabsPositionChange(Sender: TObject);
+begin
+  UpdateTabsPositionDependents;
+end;
+
+procedure TfrmOptionsTabs.UpdateTabsPositionDependents;
+var
+  bVertical: Boolean;
+begin
+  // Left and Right positions show tabs as a vertical list (see TFileViewTabList)
+  bVertical := cmbTabsPosition.ItemIndex in [2, 3];
+  cbTabsMultiLines.Enabled := not bVertical;
+  cbTabsShowCloseButton.Visible := bVertical or (nbcShowCloseButtons in FPageControl.GetCapabilities);
 end;
 
 class function TfrmOptionsTabs.GetIconIndex: integer;
@@ -116,18 +134,19 @@ begin
   if cbTabsMultiLines.Visible then
     cbTabsMultiLines.Checked := tb_multiple_lines in gDirTabOptions;
 
-  cbTabsShowCloseButton.Visible := (nbcShowCloseButtons in FPageControl.GetCapabilities);
-  if cbTabsShowCloseButton.Visible then
-    cbTabsShowCloseButton.Checked := tb_show_close_button in gDirTabOptions;
+  cbTabsShowCloseButton.Checked := tb_show_close_button in gDirTabOptions;
 
   edtTabsLimitLength.Text := IntToStr(gDirTabLimit);
 
   case gDirTabPosition of
     tbpos_top: cmbTabsPosition.ItemIndex := 0;
     tbpos_bottom: cmbTabsPosition.ItemIndex := 1;
+    tbpos_left: cmbTabsPosition.ItemIndex := 2;
+    tbpos_right: cmbTabsPosition.ItemIndex := 3;
     else
       cmbTabsPosition.ItemIndex := 0;
   end;
+  UpdateTabsPositionDependents;
 
   Application.ProcessMessages;
 end;
@@ -173,6 +192,8 @@ begin
   case cmbTabsPosition.ItemIndex of
     0: gDirTabPosition := tbpos_top;
     1: gDirTabPosition := tbpos_bottom;
+    2: gDirTabPosition := tbpos_left;
+    3: gDirTabPosition := tbpos_right;
   end;
 end;
 
