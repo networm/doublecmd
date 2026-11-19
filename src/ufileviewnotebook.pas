@@ -672,7 +672,7 @@ end;
 
 function TFileViewNotebook.IsVerticalTabs: Boolean;
 begin
-  Result:= gDirTabPosition in [tbpos_left, tbpos_right];
+  Result:= gDirTabPosition in [tbpos_left, tbpos_right, tbpos_middle, tbpos_sides];
 end;
 
 function TFileViewNotebook.TabsVisible: Boolean;
